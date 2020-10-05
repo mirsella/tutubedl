@@ -9,7 +9,7 @@
       <button class="inline-flex justify-center mx-1 focus:outline-none">
         <span class="w-32 h-10 px-4 py-2 text-sm rounded-r-lg md:text-lg md:w-48 bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700">
           <svg v-if="loading.get" class="inline-flex w-5 h-4 mb-1 mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <path class="bg-purple-600 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
           <span :class="{ hidden: loading.get }" class="md:inline-block">get video(s) list</span>
         </span>
@@ -17,7 +17,7 @@
     </form>
     <h1 v-if="err" class="m-10 text-red-700 place-self-center">{{err}}</h1>
     <div v-if="videos.length > 1" class="self-center m-5">
-      <div class="p-1 mb-2 text-center rounded-t-lg bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">
+      <div class="p-1 mb-1 text-center rounded-t-lg bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">
         download all :
       </div>
       <button @click="downloadall('audio')" class="px-8 py-2 mr-1 text-white bg-purple-700 rounded-bl-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none place-self-center">
@@ -26,8 +26,8 @@
       <button @click="downloadall('video')" class="px-8 py-2 text-white bg-purple-700 rounded-br-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none place-self-center">
         video
       </button>
-      <svg v-if="loading.all" class="inline-block w-5 h-4 ml-2 animate-spin place-self-center" fill="none" viewBox="0 0 24 24">
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      <svg v-if="loading.all" class="w-5 mx-auto mt-5 animate-spin place-self-center" fill="none" viewBox="0 0 24 24">
+        <path class="bg-purple-600 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
     </div>
     <div :key="video.title" v-for="(video, index) in videos">
@@ -42,7 +42,7 @@
               video
             </button>
             <svg v-if="loading.single[index]" class="inline-block h-4 ml-2 text-white animate-spin" fill="none" viewBox="0 0 24 24">
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path class="bg-purple-600 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
           <span class="m-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">{{video.title}}</span>
@@ -87,6 +87,7 @@ export default {
       })
       if(response.ok) {
         this.videos = await response.json();
+        let index
         for(index in this.videos) {
           this.loading.single[index] = false
         }
@@ -98,6 +99,7 @@ export default {
     async downloadall(type) {
       this.loading.all = true
       let promises = []
+      let video
       for (video of this.videos) {
         promises.push(this.download(video, type))
       }
