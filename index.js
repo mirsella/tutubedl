@@ -12,7 +12,7 @@ app.use(morgan('common'));
 app.use(cors())
 app.use(secure)
 app.use(express.json());
-app.use(express.static('public/'));
+app.use(express.static('dist/'));
 
 app.post('/check', async (req, res) => {
   let playlistregex = /\/playlist\?list\=/;
