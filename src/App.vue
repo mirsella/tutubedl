@@ -1,45 +1,59 @@
-<template class="h-full font-bold text-white bg-black">
-  <div class="flex flex-col"> 
-    <form @submit.prevent="list()" name="form" class="inline-flex m-2">
-      <a @mouseover="gitover=true" @mouseleave="gitover=false" href="https://github.com/mirsella/tutubedl" target="_blank" class="my-2">
-        <img v-if="!gitover" src="github.png" alt="github" class="w-12">
-        <img v-if="gitover" src="github-face.png" alt="github" class="w-12">
+<template>
+  <main class="flex flex-col h-screen font-bold text-white bg-black">
+    <form @submit.prevent="list()" name="form" class="inline-flex my-2">
+      <a @mouseover="gitover=true" @mouseleave="gitover=false" href="https://github.com/mirsella/tutubedl" target="_blank" class="m-auto mx-1">
+        <img v-if="!gitover" src="@/assets/github.png" alt="github" class="w-12">
+        <img v-if="gitover" src="@/assets/github-face.png" alt="github" class="w-12">
       </a>
-      <input type="text" v-model="url" placeholder="youtube url" class="w-full px-2 py-2 m-1 mr-0 text-base leading-normal bg-purple-400 rounded-l-lg md:text-xl placeholder-current focus:outline-none focus:bg-purple-500">
-      <button class="inline-flex justify-center w-56 px-4 py-2 m-1 ml-0 text-sm bg-purple-700 rounded-r-lg md:text-lg focus:outline-none hover:bg-purple-800">
-        <svg v-if="loading.get" class="w-5 h-4 mt-px mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        get video(s) list
+      <input type="text" v-model="url" placeholder="youtube url" class="w-full h-10 p-2 text-base leading-normal rounded-l-lg bg-gradient-to-r from-pink-600 to-purple-600 md:text-lg placeholder-current focus:outline-none">
+      <button class="inline-flex justify-center mx-1 focus:outline-none">
+        <span class="w-32 h-10 px-4 py-2 text-sm rounded-r-lg md:text-lg md:w-48 bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700">
+          <svg v-if="loading.get" class="inline-flex w-5 h-4 mb-1 mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span :class="{ hidden: this.loading.get }" class="md:inline-block">get video(s) list</span>
+        </span>
       </button>
     </form>
     <h1 v-if="err" class="m-10 text-red-700 place-self-center">{{err}}</h1>
-    <button v-if="videos.length > 1" @click="downloadall()" class="inline-flex self-center justify-center px-8 py-2 m-4 bg-purple-700 rounded focus:outline-none hover:bg-purple-800 place-self-center">
-      <svg v-if="loading.all" class="w-5 h-4 mt-px mr-6 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+    <div v-if="videos.length > 1" class="self-center m-5">
+      <div class="p-1 mb-2 text-center rounded-t-lg bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">
+        download all :
+      </div>
+      <button @click="downloadall('audio')" class="px-8 py-2 text-white bg-purple-700 rounded-b-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none place-self-center">
+        audio
+      </button>
+      <button @click="downloadall('video')" class="px-8 py-2 text-white bg-purple-700 rounded-b-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none place-self-center">
+        video
+      </button>
+      <svg v-if="loading.all" class="inline-block w-5 h-4 ml-2 animate-spin place-self-center" fill="none" viewBox="0 0 24 24">
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
-      download all
-    </button>
-    <div :key="index" v-for="(video, index) in videos">
-      <div class="items-center m-10 lg:flex sm:block">
-        <iframe class="m-2 md:m-5 md:w-1/3 w-42" :src="'https://youtube.com/embed/'+video.id" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div :key="video.title" v-for="(video, index) in videos">
+      <div class="items-center block m-10 lg:flex">
+        <iframe class="m-2 md:m-5 md:w-4/12 w-42" :src="'https://youtube.com/embed/'+video.id" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div>
-          <button @click="onedownload(video, index)" class="px-4 py-2 text-center text-white bg-purple-700 rounded hover:bg-purple-800" target="_blank">
-            <svg v-if="loading.single[index]" class="inline-block h-4 mt-px mr-6 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+          <div class="m-3 text-center md:text-left">
+            <button @click="onedownload(video, 'audio', index)" class="px-4 py-2 text-center text-white bg-purple-700 rounded-l-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none hover:bg-purple-800" target="_blank">
+              audio
+            </button>
+            <button @click="onedownload(video, 'video', index)" class="px-4 py-2 text-center text-white bg-purple-700 rounded-r-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none hover:bg-purple-800" target="_blank">
+              video
+            </button>
+            <svg v-if="loading.single[index]" class="inline-block h-4 ml-2 text-white animate-spin" fill="none" viewBox="0 0 24 24">
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            download
-          </button>
-          <span class="m-5">{{video.title}}</span>
-          <span class="block m-5">{{video.duration}}</span>
+          </div>
+          <span class="m-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">{{video.title}}</span>
+          <span class="block m-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">{{video.duration}}</span>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
-// import download from '@/assets/download.min.js'
 export default {
   name: 'App',
   data() {
@@ -110,5 +124,6 @@ export default {
     }
   }
 }
+// loadScript("https://unpkg.com/downloadjs")
 </script>
 
