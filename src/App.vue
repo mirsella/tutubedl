@@ -11,7 +11,7 @@
           <svg v-if="loading.get" class="inline-flex w-5 h-4 mb-1 mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span :class="{ hidden: this.loading.get }" class="md:inline-block">get video(s) list</span>
+          <span :class="{ hidden: loading.get }" class="md:inline-block">get video(s) list</span>
         </span>
       </button>
     </form>
@@ -20,10 +20,10 @@
       <div class="p-1 mb-2 text-center rounded-t-lg bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">
         download all :
       </div>
-      <button @click="downloadall('audio')" class="px-8 py-2 text-white bg-purple-700 rounded-b-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none place-self-center">
+      <button @click="downloadall('audio')" class="px-8 py-2 mr-1 text-white bg-purple-700 rounded-bl-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none place-self-center">
         audio
       </button>
-      <button @click="downloadall('video')" class="px-8 py-2 text-white bg-purple-700 rounded-b-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none place-self-center">
+      <button @click="downloadall('video')" class="px-8 py-2 text-white bg-purple-700 rounded-br-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none place-self-center">
         video
       </button>
       <svg v-if="loading.all" class="inline-block w-5 h-4 ml-2 animate-spin place-self-center" fill="none" viewBox="0 0 24 24">
@@ -35,10 +35,10 @@
         <iframe class="m-2 md:m-5 md:w-4/12 w-42" :src="'https://youtube.com/embed/'+video.id" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div>
           <div class="m-3 text-center md:text-left">
-            <button @click="onedownload(video, 'audio', index)" class="px-4 py-2 text-center text-white bg-purple-700 rounded-l-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none hover:bg-purple-800" target="_blank">
+            <button @click="onedownload(video, 'audio', index)" class="px-4 py-2 mx-px text-center text-white bg-purple-700 rounded-l-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none hover:bg-purple-800" target="_blank">
               audio
             </button>
-            <button @click="onedownload(video, 'video', index)" class="px-4 py-2 text-center text-white bg-purple-700 rounded-r-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none hover:bg-purple-800" target="_blank">
+            <button @click="onedownload(video, 'video', index)" class="px-4 py-2 mx-px text-center text-white bg-purple-700 rounded-r-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none hover:bg-purple-800" target="_blank">
               video
             </button>
             <svg v-if="loading.single[index]" class="inline-block h-4 ml-2 text-white animate-spin" fill="none" viewBox="0 0 24 24">
@@ -54,16 +54,18 @@
 </template>
 
 <script>
+import download from 'downloadjs'
 export default {
   name: 'App',
   data() {
     return {
+      api: process.env.VUE_APP_API || '',
       url: '',
       err: '',
       gitover: false,
       loading: {
-        get: false,
         all: false,
+        get: false,
         single: []
       },
       videos: [],
@@ -74,7 +76,7 @@ export default {
       this.loading.get = true
       this.err = ''
       this.videos = []
-      const response = await fetch('/check', {
+      const response = await fetch(this.api+'/check', {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
@@ -85,38 +87,39 @@ export default {
       })
       if(response.ok) {
         this.videos = await response.json();
-        var index
         for(index in this.videos) {
-          this.loading.single[index] = false;
+          this.loading.single[index] = false
         }
       } else {
         this.err = await response.statusText;
       }
       this.loading.get = false
     },
-    async downloadall() {
-      let promises = []
+    async downloadall(type) {
       this.loading.all = true
-      var video
+      let promises = []
       for (video of this.videos) {
-        promises.push(this.download(video))
+        promises.push(this.download(video, type))
       }
       Promise.all(promises)
-        .then(this.loading.all = false)
+        .then(res => this.loading.all = false )
     },
-    async onedownload(video, index) {
-      this.set(this.loading.single, index, true)
-      await this.download(video)
-      this.set(this.loading.single, index, false)
+    async onedownload(video, type, index) {
+      this.loading.single[index] = true
+      await this.download(video, type)
+      this.loading.single[index] = false
     },
-    async download(video) {
-      await fetch('/audio?id='+video.id, {
+    async download(video, type) {
+      await fetch(this.api+`/${type}?id=${video.id}`, {
         method: 'GET'
       })
         .then(resp => resp.blob())
         .then(blob => {
-          // download(blob, video.title.replace(/[^\x20-\x7E]/g, "")+'.mp3');
-          console.log(blob)
+          if (type == "audio") {
+            download(blob, video.title.replace(/[^\x20-\x7E]/g, "")+'.mp3');
+          } else {
+            download(blob, video.title.replace(/[^\x20-\x7E]/g, "")+'.mp4');
+          }
         })
         .catch(err => {
           this.err = err;
@@ -124,6 +127,5 @@ export default {
     }
   }
 }
-// loadScript("https://unpkg.com/downloadjs")
 </script>
 
