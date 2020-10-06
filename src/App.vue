@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <button :class="[ !bgstyles[2] ? bgstyles[3]: '' ]" class="w-56 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500" @click="bgstyles[0] = !bgstyles[0]">toggle ununsable background :)</button>
+    <button :class="[ !bgstyles[2] ? bgstyles[3]: '' ]" class="w-56 text-transparent focus:outline-none bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500" @click="bgstyles[0] = !bgstyles[0]">toggle ununsable background :)</button>
   </main>
 </template>
 
