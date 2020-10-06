@@ -1,12 +1,12 @@
 <template>
-  <main class="flex flex-col h-screen font-bold text-white bg-black">
+  <main class="flex flex-col min-h-screen font-bold text-white bg-black" :class="[ bgstyles[0] ? bgstyles[1]: '' ]">
     <form @submit.prevent="list()" name="form" class="inline-flex my-2">
       <a @mouseover="gitover=true" @mouseleave="gitover=false" href="https://github.com/mirsella/tutubedl" target="_blank" class="m-auto mx-1">
         <img v-if="!gitover" src="@/assets/github.png" alt="github" class="w-12">
         <img v-if="gitover" src="@/assets/github-face.png" alt="github" class="w-12">
       </a>
       <input type="text" v-model="url" placeholder="youtube url" class="w-full h-10 p-2 text-base leading-normal rounded-l-lg bg-gradient-to-r from-pink-600 to-purple-600 md:text-lg placeholder-current focus:outline-none">
-      <button class="inline-flex justify-center mx-1 focus:outline-none">
+      <button class="inline-flex justify-center ml-1 mr-2 focus:outline-none">
         <span class="w-32 h-10 px-4 py-2 text-sm rounded-r-lg md:text-lg md:w-48 bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700">
           <svg v-if="loading.get" class="inline-flex w-5 h-4 mb-1 mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
             <path class="bg-purple-600 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -50,6 +50,7 @@
         </div>
       </div>
     </div>
+    <button :class="[ !bgstyles[2] ? bgstyles[3]: '' ]" class="w-56 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500" @click="bgstyles[0] = !bgstyles[0]">toggle ununsable background :)</button>
   </main>
 </template>
 
@@ -63,6 +64,7 @@ export default {
       url: '',
       err: '',
       gitover: false,
+      bgstyles: [ false, 'bg-gradient-to-r from-orange-400 via-red-500 to-pink-500', false, 'fixed bottom-0' ],
       loading: {
         all: false,
         get: false,
@@ -75,7 +77,7 @@ export default {
     async list() { 
       this.loading.get = true
       this.err = ''
-      this.videos = []
+      // this.videos = []
       const response = await fetch(this.api+'/check', {
         method: 'POST',
         headers: {
@@ -95,6 +97,9 @@ export default {
         this.err = await response.statusText;
       }
       this.loading.get = false
+      setTimeout(() => { 
+        this.bgstyles[2] = document.querySelector('main').offsetHeight > screen.height ? true : false
+      }, 0)
     },
     async downloadall(type) {
       this.loading.all = true
@@ -104,7 +109,7 @@ export default {
         promises.push(this.download(video, type))
       }
       Promise.all(promises)
-        .then(res => this.loading.all = false )
+        .then(() => this.loading.all = false)
     },
     async onedownload(video, type, index) {
       this.loading.single[index] = true
