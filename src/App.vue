@@ -77,6 +77,7 @@ export default {
     // when client not on same host as backend (heroku) ping the server to pre wake it up
     if (this.api) {
       fetch(this.api)
+        .then(() => console.log('finished ping backend'))
     }
   },
   methods: {
