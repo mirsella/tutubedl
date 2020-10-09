@@ -76,7 +76,7 @@ export default {
   mounted() {
     // when client not on same host as backend (heroku) ping the server to pre wake it up
     if (this.api) {
-      fetch(api)
+      fetch(this.api)
     }
   },
   methods: {
