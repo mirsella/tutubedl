@@ -18,6 +18,8 @@
     "morgan": "^1.10.0",
     "ssl-express-www": "^3.0.7",
     "vue": "^3.0.0-0",
+    "vue-google-adsense": "^1.9.0",
+    "vue-script2": "^2.1.0",
     "ytdl-core": "^3.3.0",
     "ytpl": "^1.0.1"
   },
