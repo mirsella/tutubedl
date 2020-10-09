@@ -33,7 +33,7 @@ app.post('/check', async (req, res) => {
           res.json(videos)
         })
         .catch(err => { 
-          res.statusMessage = "can't download video(s) data. probably wrong url. error: "+err
+          res.statusMessage = "can't download video(s) data. probably wrong url : "+err
           res.sendStatus(400)
         })
     } else {
@@ -50,12 +50,12 @@ app.post('/check', async (req, res) => {
           res.json(videos)
         })
         .catch(err => { 
-          res.statusMessage = "can't download video(s) data. probably wrong url. error: "+err
+          res.statusMessage = "can't download video(s) data. probably wrong url. : "+err
           res.sendStatus(400)
         })
     }
   } catch(err) {
-    res.statusMessage = "can't download video(s) data. probably wrong url. error: "+err
+    res.statusMessage = "can't download video(s) data. probably wrong url. : "+err
     res.sendStatus(400)
   }
 })
