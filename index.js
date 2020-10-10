@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static('dist/'));
 
 app.post('/check', async (req, res) => {
-  let playlistregex = /\/playlist\?list\=/;
+  let playlistregex = /\/playlist\?list=/;
   let videos = []
   let url = req.body.url;
   try {
@@ -23,6 +23,7 @@ app.post('/check', async (req, res) => {
       ytpl(url)
         .then(info => info.items)
         .then(info => {
+          let video
           for (video of info) {
             videos.push({
               title: video.title,
@@ -50,12 +51,12 @@ app.post('/check', async (req, res) => {
           res.json(videos)
         })
         .catch(err => { 
-          res.statusMessage = "can't download video(s) data. probably wrong url. : "+err
+          res.statusMessage = "can't download video(s) data. probably wrong url : "+err
           res.sendStatus(400)
         })
     }
   } catch(err) {
-    res.statusMessage = "can't download video(s) data. probably wrong url. : "+err
+    res.statusMessage = "can't download video(s) data. probably wrong url : "+err
     res.sendStatus(400)
   }
 })

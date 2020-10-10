@@ -1,5 +1,6 @@
 <template>
   <main class="flex flex-col min-h-screen font-bold text-white bg-black" :class="[ bgstyles[0] ? bgstyles[1]: '' ]">
+    <h1 class="m-5 text-xl text-center text-transparent md:text-5xl bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-purple-900">Yet Another Youtube Downloader</h1>
     <form @submit.prevent="list()" name="form" class="inline-flex my-2">
       <a @mouseover="gitover=true" @mouseleave="gitover=false" href="https://github.com/mirsella/tutubedl" target="_blank" class="m-auto mx-1">
         <img v-if="!gitover" src="@/assets/github.png" alt="github" class="w-12">
@@ -11,7 +12,7 @@
           <svg v-if="loading.get" class="inline-flex w-5 h-4 mb-1 mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
             <path class="bg-purple-600 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span :class="{ hidden: loading.get }" class="md:inline-block">get video(s) list</span>
+          <span :class="{ hidden: loading.get }" class="md:inline-block">search video(s)</span>
         </span>
       </button>
     </form>
@@ -50,7 +51,7 @@
         </div>
       </div>
     </div>
-    <button :class="[ !bgstyles[2] ? bgstyles[3]: '' ]" class="w-56 text-transparent focus:outline-none bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500" @click="bgstyles[0] = !bgstyles[0]">toggle ununsable background :)</button>
+    <button :class="[ !bgstyles[2] ? bgstyles[3]: '' ]" class="w-48 text-sm text-transparent focus:outline-none bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500" @click="bgstyles[0] = !bgstyles[0]">toggle mango background :)</button>
   </main>
 </template>
 
@@ -74,40 +75,46 @@ export default {
     }
   },
   mounted() {
-    // when client not on same host as backend (heroku) ping the server to pre wake it up
-    if (this.api) {
+    // ping heroku server to pre wake it up
+    if (this.api.includes('herokuapp')) {
       console.log('ping', this.api)
       fetch(this.api)
         .then(() => console.log('finished ping', this.api))
+        // .catch(err => this.err = "could not reach server " + err)
     }
   },
   methods: {
     async list() { 
       this.loading.get = true
       this.err = ''
-      // this.videos = []
-      const response = await fetch(this.api+'/check', {
+      await fetch(this.api+'/check', {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
         },
         body: JSON.stringify({
           url: this.url
-        }),
+        })
       })
-      if(response.ok) {
-        this.videos = await response.json();
-        let index
-        for(index in this.videos) {
-          this.loading.single[index] = false
-        }
-      } else {
-        this.err = await response.statusText;
-      }
+        // .then(res => res.json())
+        .then(res => {
+          if(res.ok) {
+            res.json().then(body => {
+              this.videos = body
+              setTimeout(() => { 
+                this.bgstyles[2] = document.querySelector('main').offsetHeight > screen.height ? true : false
+              }, 0)
+            })
+            let index
+            for(index in this.videos) {
+              this.loading.single[index] = false
+            }
+          } else {
+            this.err = res.statusText;
+          }
+        })
+        .catch(err => this.err = err)
       this.loading.get = false
-      setTimeout(() => { 
-        this.bgstyles[2] = document.querySelector('main').offsetHeight > screen.height ? true : false
-      }, 0)
     },
     async downloadall(type) {
       this.loading.all = true
