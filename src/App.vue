@@ -8,11 +8,11 @@
       </a>
       <input type="text" v-model="url" placeholder="youtube url" class="w-full h-10 p-2 text-base leading-normal rounded-l-lg bg-gradient-to-r from-pink-600 to-purple-600 md:text-lg placeholder-current focus:outline-none">
       <button class="inline-flex justify-center ml-1 mr-2 focus:outline-none">
-        <span class="w-32 h-10 px-4 py-2 text-sm rounded-r-lg md:text-lg md:w-48 bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700">
+        <span class="w-24 h-10 px-4 py-2 rounded-r-lg md:text-lg md:w-48 bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700">
           <svg v-if="loading.get" class="inline-flex w-5 h-4 mb-1 mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
             <path class="bg-purple-600 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span :class="{ hidden: loading.get }" class="md:inline-block">search video(s)</span>
+          <span :class="{ hidden: loading.get }" class="md:inline-block">search</span>
         </span>
       </button>
     </form>
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <button :class="[ !bgstyles[2] ? bgstyles[3]: '' ]" class="w-48 text-sm text-transparent focus:outline-none bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500" @click="bgstyles[0] = !bgstyles[0]">toggle mango background :)</button>
+    <button :class="[ !bgstyles[2] ? bgstyles[3]: '' ]" class="w-48 ml-1 text-sm text-transparent focus:outline-none bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500" @click="bgstyles[0] = !bgstyles[0]">toggle mango background :)</button>
   </main>
 </template>
 
