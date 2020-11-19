@@ -61,7 +61,7 @@ app.post('/check', async (req, res) => {
   }
 })
 
-app.get('/audio', async (req, res, next) => {
+app.get('/audio', async (req, res) => {
   try {
     var url = req.query.id;
     res.header('Content-Disposition', `attachment; filename="audio.mp3"`);
@@ -76,7 +76,7 @@ app.get('/audio', async (req, res, next) => {
   }
 });
 
-app.get('/video', async (req, res, next) => {
+app.get('/video', async (req, res) => {
   try {
     var url = req.query.id;
     res.header('Content-Disposition', `attachment; filename="audio.mp4"`);
