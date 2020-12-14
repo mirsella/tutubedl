@@ -19,7 +19,7 @@
     "ssl-express-www": "^3.0.7",
     "vue": "^3.0.0-0",
     "ytdl-core": "^3.3.0",
-    "ytpl": "^1.0.1"
+    "ytpl": "github:TimeForANinja/node-ytpl"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
