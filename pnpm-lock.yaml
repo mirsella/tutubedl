@@ -5,11 +5,12 @@ dependencies:
   dotenv: 8.2.0
   downloadjs: 1.4.7
   express: 4.17.1
+  highlight.js: 10.4.1
   morgan: 1.10.0
   ssl-express-www: 3.0.7
   vue: 3.0.4
   ytdl-core: 3.4.2
-  ytpl: 1.0.1
+  ytpl: github.com/TimeForANinja/node-ytpl/511dc726088db11465dc8e636282afb4b5cba568
 devDependencies:
   '@vue/cli-plugin-babel': 4.5.9_@vue+cli-service@4.5.9+vue@3.0.4
   '@vue/cli-plugin-eslint': 4.5.9_6778c0324b153720448c6ab0d5359212
@@ -4659,7 +4660,6 @@ packages:
     resolution:
       integrity: sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
   /highlight.js/10.4.1:
-    dev: true
     resolution:
       integrity: sha512-yR5lWvNz7c85OhVAEAeFhVCc/GV4C30Fjzc/rCP0aCWzc1UUOPUk55dK/qdwTZHBvMZo+eZ2jpk62ndX/xMFlg==
   /hmac-drbg/1.0.1:
@@ -5870,6 +5870,12 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-fy9x3d/0oOIhkwAms6kgxTYkHwdELhMfgj+9a/aYZpJdTWIIWGta9aXHUtnzUn+LjBmRoTdPRQSi2hkmEvXk3A==
+  /miniget/4.1.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-kzhrNv5L7LlomwGmPGQsLQ2PnT1LeJJWfB0wNFGyv426gEM1gsfziBQmfkr6XOBA8EusZg9nowlNT5CbuKTjZg==
   /minimalistic-assert/1.0.1:
     dev: true
     resolution:
@@ -9262,32 +9268,35 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-R6m1XZQK+iXxb9Q9Wo14/K8mti1r4HnKv4zKrbp5FvMG/jDbeV0xQHUHqqDLk+uiDy/VU6fVATm5x2ms0QaF5w==
-  /ytpl/1.0.1:
+  github.com/TimeForANinja/node-ytpl/511dc726088db11465dc8e636282afb4b5cba568:
     dependencies:
       html-entities: 1.3.3
-      miniget: 2.1.0
+      miniget: 4.1.0
     dev: false
     engines:
       node: '>=8'
+    name: ytpl
     resolution:
-      integrity: sha512-v2TGepCZSoVYZAAPoHIz1Hr+auGBJb11npBY4PLAofAdQFlJMopGodmv3JENkW1ghxBW94CASfyOJ9bgpb+nEg==
+      tarball: 'https://codeload.github.com/TimeForANinja/node-ytpl/tar.gz/511dc726088db11465dc8e636282afb4b5cba568'
+    version: 2.0.1
 specifiers:
-  '@vue/cli-plugin-babel': ~4.5.0
-  '@vue/cli-plugin-eslint': ~4.5.0
-  '@vue/cli-service': ~4.5.0
-  '@vue/compiler-sfc': ^3.0.0
+  '@vue/cli-plugin-babel': ~4.5.9
+  '@vue/cli-plugin-eslint': ~4.5.9
+  '@vue/cli-service': ~4.5.9
+  '@vue/compiler-sfc': ^3.0.4
   babel-eslint: ^10.1.0
-  core-js: ^3.6.5
+  core-js: ^3.8.1
   cors: ^2.8.5
   dotenv: ^8.2.0
   downloadjs: ^1.4.7
-  eslint: ^6.7.2
-  eslint-plugin-vue: ^7.0.0-0
+  eslint: ^6.8.0
+  eslint-plugin-vue: ^7.2.0
   express: ^4.17.1
+  highlight.js: ^10.4.1
   morgan: ^1.10.0
   ssl-express-www: ^3.0.7
-  tailwindcss: ^1.8.10
-  vue: ^3.0.0-0
+  tailwindcss: ^1.9.6
+  vue: ^3.0.4
   vue-cli-plugin-tailwindcss: ~0.1.1
-  ytdl-core: ^3.3.0
+  ytdl-core: ^3.4.2
   ytpl: 'github:TimeForANinja/node-ytpl'
