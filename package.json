@@ -9,7 +9,9 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
+    "@tailwindcss/postcss7-compat": "^2.1.2",
     "@vue/compiler-sfc": "^3.0.4",
+    "autoprefixer": "^9.8.6",
     "core-js": "^3.8.1",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
@@ -17,7 +19,7 @@
     "express": "^4.17.1",
     "highlight.js": ">=10.4.1",
     "morgan": "^1.10.0",
-    "postcss": ">=8.2.10",
+    "postcss": "^7.0.35",
     "ssl-express-www": "^3.0.7",
     "vue": "^3.0.4",
     "ytdl-core": "^4.7.0",
@@ -30,7 +32,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^7.2.0",
-    "tailwindcss": "^1.9.6",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
     "vue-cli-plugin-tailwindcss": "~0.1.1"
   },
   "eslintConfig": {
