@@ -14,7 +14,7 @@
     "autoprefixer": "^9.8.6",
     "core-js": "^3.8.1",
     "cors": "^2.8.5",
-    "dotenv": "^8.6.0",
+    "dotenv": "^10.0.0",
     "downloadjs": "^1.4.7",
     "express": "^4.17.1",
     "highlight.js": ">=10.4.1",
