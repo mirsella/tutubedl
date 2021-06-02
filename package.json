@@ -18,7 +18,7 @@
     "express": "^4.17.1",
     "highlight.js": ">=11.0.0",
     "morgan": "^1.10.0",
-    "ssl-express-www": "^3.0.7",
+    "ssl-express-www": "^3.0.8",
     "vue": "^3.0.4",
     "ytdl-core": "^4.8.2",
     "ytpl": "^2.2.1"
