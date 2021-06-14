@@ -17,16 +17,18 @@
       </button>
     </form>
     <h1 v-if="err" class="m-10 text-red-700 place-self-center">{{err}}</h1>
-    <div v-if="videos.length > 1" class="self-center m-5">
+    <div v-if="videos.length > 1" class="m-5 w-min place-self-center">
       <div class="p-1 mb-1 text-center rounded-t-lg bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">
         download all :
       </div>
-      <button @click="downloadall('audio')" class="px-8 py-2 mr-1 text-white bg-purple-700 rounded-bl-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none place-self-center">
-        audio
-      </button>
-      <button @click="downloadall('video')" class="px-8 py-2 text-white bg-purple-700 rounded-br-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none place-self-center">
-        video
-      </button>
+      <div class="w-auto inline-flex">
+        <button @click="downloadall('audio')" class="px-8 py-2 mr-1 text-white bg-purple-700 rounded-bl-lg bg-gradient-to-r from-pink-500 to-pink-600 focus:outline-none place-self-center">
+          audio
+        </button>
+        <button @click="downloadall('video')" class="px-8 py-2 text-white bg-purple-700 rounded-br-lg bg-gradient-to-r from-pink-600 to-purple-700 focus:outline-none place-self-center">
+          video
+        </button>
+      </div>
       <svg v-if="loading.all" class="w-5 mx-auto mt-5 animate-spin place-self-center" fill="none" viewBox="0 0 24 24">
         <path class="bg-purple-600 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
