@@ -1,7 +1,0 @@
-cy.visit('http://localhost/');
-cy.get('.w-full').click();
-cy.get('.w-full').type('https://www.youtube.com/playlist?list=PLnYA0n5BTNsflhBOH0nMcPoSNPvMqmkoK');
-cy.get('.justify-center').click();
-cy.get('.my-2').submit();
-cy.get('div:nth-child(4) .px-4:nth-child(1)').click();
-cy.get('div:nth-child(6) .px-4:nth-child(2)').click();

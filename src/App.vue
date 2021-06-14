@@ -3,8 +3,8 @@
     <h1 class="m-5 text-xl text-center text-transparent md:text-5xl bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-purple-900">Yet Another Youtube Downloader</h1>
     <form @submit.prevent="list()" name="form" class="inline-flex my-2">
       <a @mouseover="gitover=true" @mouseleave="gitover=false" href="https://github.com/mirsella/tutubedl" target="_blank" class="m-auto mx-1">
-        <img v-if="!gitover" src="@/assets/github.png" alt="github" class="w-12">
-        <img v-if="gitover" src="@/assets/github-face.png" alt="github" class="w-12">
+        <img v-if="!gitover" src="./assets/github.png" alt="github" class="w-12">
+        <img v-if="gitover" src="./assets/github-face.png" alt="github" class="w-12">
       </a>
       <input type="text" v-model="url" placeholder="youtube url" class="w-full h-10 p-2 text-base leading-normal rounded-l-lg bg-gradient-to-r from-pink-600 to-purple-600 md:text-lg placeholder-current focus:outline-none">
       <button class="inline-flex justify-center ml-1 mr-2 focus:outline-none">
@@ -57,11 +57,12 @@
 
 <script>
 import download from 'downloadjs'
+
 export default {
   name: 'App',
   data() {
     return {
-      api: process.env.VUE_APP_API || '',
+      api: import.meta.env.VITE_API || '',
       url: '',
       err: '',
       gitover: false,
@@ -80,7 +81,7 @@ export default {
       console.log('ping', this.api)
       fetch(this.api)
         .then(() => console.log('finished ping', this.api))
-        // .catch(err => this.err = "could not reach server " + err)
+      // .catch(err => this.err = "could not reach server " + err)
     }
   },
   methods: {
@@ -96,7 +97,7 @@ export default {
           url: this.url
         })
       })
-        // .then(res => res.json())
+      // .then(res => res.json())
         .then(res => {
           if(res.ok) {
             res.json().then(body => {

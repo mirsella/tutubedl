@@ -7,12 +7,10 @@ const app = express();
 app.enable('trust proxy');
 const ytdl = require('ytdl-core');
 const ytpl = require('ytpl');
-const secure = require('ssl-express-www');
 
 app.use(morgan('common'));
 app.use(cors())
 app.use(helmet())
-app.use(secure)
 app.use(express.json());
 app.use(express.static('dist/'));
 
@@ -93,7 +91,7 @@ app.get('/video', async (req, res) => {
 });
 
 
-let PORT = process.env.PORT || 80
+let PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
   console.log(`Listening at port :${PORT}`);
 });
