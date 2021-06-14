@@ -3,7 +3,8 @@
   "scripts": {
     "serve": "vite preview",
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "start": "node index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
