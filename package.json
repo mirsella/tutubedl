@@ -23,6 +23,6 @@
     "@vue/compiler-sfc": "^3.1.4",
     "vite": "^2.4.1",
     "vite-plugin-windicss": "^1.2.4",
-    "windicss": "^3.1.4"
+    "windicss": "^3.1.5"
   }
 }
