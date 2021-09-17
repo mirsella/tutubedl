@@ -49,7 +49,7 @@ app.use(async (req,res,next) => {
 })
 
 app.all('/audio', async (req,res) =>{
-  url = req.body.url || 'yjMvLJZ9j0I'
+  url = req.body.url
   const filename = `downloaded/${filecount}.%(ext)s`
   const filenamefinal = `downloaded/${filecount}.mp3`
   filecount += 1
@@ -59,7 +59,7 @@ app.all('/audio', async (req,res) =>{
 });
 
 app.all('/video', async (req,res) =>{
-  url = req.body.url || 'yjMvLJZ9j0I'
+  url = req.body.url
   const filename = `downloaded/${filecount}.mp4`
   filecount += 1
   await dl(url, 'video', filename)
@@ -68,11 +68,11 @@ app.all('/video', async (req,res) =>{
 });
 
 app.all('/getinfo', async (req,res) =>{
-  res.json(await ytdl.getVideoInfo( req.body.url || 'yjMvLJZ9j0I' ))
+  res.json(await ytdl.getVideoInfo(req.body.url))
 });
 
 app.all('/playlist', async (req,res) =>{
-  url = req.body.url || 'PLnYA0n5BTNscRlnFBkNGJrCyKdOqGtID9' 
+  url = req.body.url
   if (await ytpl.validateID(url)) {
     res.json(
       await ytpl(url)
