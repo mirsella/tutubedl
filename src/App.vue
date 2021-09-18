@@ -1,12 +1,12 @@
 <template>
   <main class="flex flex-col min-h-screen font-bold text-white bg-black">
-    <h1 class="m-5 text-xl text-center text-transparent md:text-5xl bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-purple-900">Yet Another Youtube Downloader</h1>
+    <h1 class="m-5 text-xl text-center text-transparent md:text-5xl bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-purple-900">Yet Another Youtube-DL</h1>
     <form @submit.prevent="search()" name="form" class="inline-flex my-2">
       <a @mouseover="gitover=true" @mouseleave="gitover=false" href="https://github.com/mirsella/tutubedl" target="_blank" class="m-auto mx-1">
         <img v-if="!gitover" src="./assets/github.png" alt="github" class="w-12">
         <img v-if="gitover" src="./assets/github-face.png" alt="github" class="w-12">
       </a>
-      <input type="text" v-model="url" placeholder="youtube url" class="w-full h-10 p-2 text-base leading-normal rounded-l-lg bg-gradient-to-r from-pink-600 to-purple-600 md:text-lg placeholder-current focus:outline-none">
+      <input type="text" v-model="url" placeholder="url" class="w-full h-10 p-2 text-base leading-normal rounded-l-lg bg-gradient-to-r from-pink-600 to-purple-600 md:text-lg placeholder-current focus:outline-none">
       <button class="inline-flex justify-center ml-1 mr-2 focus:outline-none">
         <span class="w-24 h-10 px-4 py-2 rounded-r-lg md:text-lg md:w-48 bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700">
           <svg v-if="loading.get" class="inline-flex w-5 h-4 mb-1 mr-3 text-white animate-spin" fill="none" viewBox="0 0 24 24">
@@ -47,7 +47,7 @@
             </svg>
           </div>
           <div class="flex justify-center md:w-full">
-            <span class="m-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">{{video.title}} {{ Math.floor(video.duration / 60) }}:{{ Math.floor(video.duration % 60) }}</span>
+            <span class="m-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">{{video.title}} {{video.duration}}</span>
           </div>
         </div>
         <div noshade class="h-1 bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700 rounded"></div>
@@ -66,7 +66,8 @@ export default {
     return {
       // apiurl: 'https://tutubedl.herokuapp.com',
       apiurl: 'http://localhost:8080',
-      url: 'https://www.youtube.com/watch?v=wRMXTvsCBwQ',
+      // url: 'https://www.youtube.com/watch?v=wRMXTvsCBwQ',
+      url: 'https://www.youtube.com/playlist?list=PLnYA0n5BTNscRlnFBkNGJrCyKdOqGtID9',
       err: '',
       gitover: false,
       loading: {
@@ -82,7 +83,18 @@ export default {
       this.loading.get = true
       this.err = ''
       if (this.url.includes('playlist?list=')) {
-        // playlist
+        await axios.post(this.apiurl + '/playlist',
+          { url: this.url },
+          { headers: { 'Content-Type': 'application/json'} }
+        )
+          .then(res => {
+            if (res.status === 200) {
+              console.log(res.data)
+              this.videos = res.data
+            } else {
+              this.err = res.statusText
+            }
+          })
       } else {
         await axios.post(this.apiurl + '/getinfo',
           { url: this.url },
@@ -90,8 +102,11 @@ export default {
         )
           .then(res => {
             if (res.status === 200) {
-              console.log(res.data)
-              this.videos = [ res.data ]
+                this.videos = [{
+                  title: res.data.title,
+                  duration: `${Math.floor(res.data.duration / 60)}:${Math.floor(res.data.duration % 60)}`,
+                  thumbnail: res.data.thumbnail
+                }]
             } else {
               this.err = res.statusText
             }
