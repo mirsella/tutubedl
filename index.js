@@ -21,16 +21,18 @@ fs.emptyDirSync('downloaded')
 let filecount = 0
 
 async function dl(url, format, filename) {
-  // options : video / audio
   const arguments = {
-    audio: [url, "-x", "--no-continue", "--audio-quality", "0", "--audio-format", "mp3", "-f", "bestaudio", "-o", filename, "--ffmpeg-location", ffmpeg.path],
-    video: [url, "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4", "-o", filename, "--ffmpeg-location", ffmpeg.path]
+    audio: [url, "-x", "--no-playlist", "--no-continue", "--audio-quality", "0", "--audio-format", "mp3", "-f", "bestaudio", "--ffmpeg-location", ffmpeg.path, "-o", filename],
+    video: [url, "-f", "--no-playlist", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4", "--ffmpeg-location", ffmpeg.path, "-o", filename]
   }
   return new Promise(resolve => {
     ytdl.exec(arguments[format])
       .on("progress", (progress) => console.log(progress.percent, progress.totalSize, progress.currentSpeed, progress.eta))
       .on("youtubeDlEvent", (eventType, eventData) => console.log(eventType, eventData))
-      .on("error", (error) => console.error(error))
+      .on("error", (error) => {
+        console.log('threw error', error)
+        return error
+      })
       .once("close", () => {
         console.log("all done")
         resolve()
@@ -50,25 +52,51 @@ app.use(async (req,res,next) => {
 
 app.all('/audio', async (req,res) =>{
   url = req.body.url
+  filecount += 1
   const filename = `downloaded/${filecount}.%(ext)s`
   const filenamefinal = `downloaded/${filecount}.mp3`
-  filecount += 1
-  await dl(url, 'audio', filename)
-  res.download(filenamefinal)
-  fs.remove(filenamefinal)
+  const error = await dl(url, 'audio', filename)
+    .then(() => {
+      res.download(filenamefinal)
+      fs.remove(filename)
+      fs.remove(filenamefinal)
+    })
+    .catch(e => {
+      res.statusMessage = e
+      res.sendStatus(400)
+    })
+  if (error) {
+      res.statusMessage = error
+      res.sendStatus(400)
+  }
 });
 
 app.all('/video', async (req,res) =>{
   url = req.body.url
-  const filename = `downloaded/${filecount}.mp4`
   filecount += 1
-  await dl(url, 'video', filename)
-  res.download(filename)
-  fs.remove(filename)
+  const filename = `downloaded/${filecount}.mp4`
+  const error = await dl(url, 'video', filename)
+    .then(() => {
+      res.download(filename)
+    })
+    .catch(e => {
+      res.statusMessage = e
+      res.sendStatus(400)
+    })
+  if (error) {
+    res.statusMessage = error
+    res.sendStatus(400)
+  }
 });
 
 app.all('/getinfo', async (req,res) =>{
-  res.json(await ytdl.getVideoInfo(req.body.url))
+  res.json(
+    await ytdl.getVideoInfo(req.body.url)
+    .catch(e => {
+      res.statusMessage = e
+      res.sendStatus(400)
+    })
+  )
 });
 
 app.all('/playlist', async (req,res) =>{
@@ -85,9 +113,9 @@ app.all('/playlist', async (req,res) =>{
       })
     )
   } else {
-      res.statusMessage = 'invalid url'
-      res.sendStatus(400)
-    }
+    res.statusMessage = 'invalid url'
+    res.sendStatus(400)
+  }
 });
 
 const PORT = process.env.PORT || 8080
