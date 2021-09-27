@@ -66,7 +66,7 @@ export default {
     return {
       // apiurl: 'https://tutubedl.herokuapp.com',
       apiurl: 'http://localhost:8080',
-      url: '',
+      url: 'https://soundcloud.com/secret-service-862007284/industry-baby',
       err: '',
       gitover: false,
       loading: {
@@ -127,12 +127,11 @@ export default {
         { headers: { 'Content-Type': 'application/json'}, responseType: 'blob' }
       )
         .then(res => {
-          if(res.status === 200) {
-            // download(res.data, this.videos[index].title.replace(/[^\x20-\x7E]/g, "")+'.mp3');
-            download(res.data, this.videos[index].title+'.mp3');
-          } else {
-            this.err = res.statusText
-          }
+          // download(res.data, this.videos[index].title.replace(/[^\x20-\x7E]/g, "")+'.mp3');
+          download(res.data, this.videos[index].title+'.mp3');
+        })
+        .catch(e => {
+          this.err = e.response.data
         })
       this.loading.single[index] = false
     },

@@ -25,13 +25,15 @@ async function dl(url, format, filename) {
     audio: [url, "-x", "--no-playlist", "--no-continue", "--audio-quality", "0", "--audio-format", "mp3", "-f", "bestaudio", "--ffmpeg-location", ffmpeg.path, "-o", filename],
     video: [url, "-f", "--no-playlist", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4", "--ffmpeg-location", ffmpeg.path, "-o", filename]
   }
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     ytdl.exec(arguments[format])
       .on("progress", (progress) => console.log(progress.percent, progress.totalSize, progress.currentSpeed, progress.eta))
       .on("youtubeDlEvent", (eventType, eventData) => console.log(eventType, eventData))
       .on("error", (error) => {
-        console.log('threw error', error)
-        return error
+        console.log('reject')
+        m = \n Error code: 1\n \n Stderr:\n ERROR: fixed output name but more than one file to download
+        const regex = /(ERROR: )(.*)$/
+        reject(e)
       })
       .once("close", () => {
         console.log("all done")
@@ -55,46 +57,35 @@ app.all('/audio', async (req,res) =>{
   filecount += 1
   const filename = `downloaded/${filecount}.%(ext)s`
   const filenamefinal = `downloaded/${filecount}.mp3`
-  const error = await dl(url, 'audio', filename)
+  await dl(url, 'audio', filename)
     .then(() => {
       res.download(filenamefinal)
       fs.remove(filename)
       fs.remove(filenamefinal)
     })
     .catch(e => {
-      res.statusMessage = e
-      res.sendStatus(400)
+      res.status(400).send(e)
     })
-  if (error) {
-      res.statusMessage = error
-      res.sendStatus(400)
-  }
 });
 
 app.all('/video', async (req,res) =>{
   url = req.body.url
   filecount += 1
   const filename = `downloaded/${filecount}.mp4`
-  const error = await dl(url, 'video', filename)
+  await dl(url, 'video', filename)
     .then(() => {
       res.download(filename)
     })
     .catch(e => {
-      res.statusMessage = e
-      res.sendStatus(400)
+      res.status(400).send(e)
     })
-  if (error) {
-    res.statusMessage = error
-    res.sendStatus(400)
-  }
 });
 
 app.all('/getinfo', async (req,res) =>{
   res.json(
     await ytdl.getVideoInfo(req.body.url)
     .catch(e => {
-      res.statusMessage = e
-      res.sendStatus(400)
+      res.status(400).send(e.message)
     })
   )
 });
@@ -108,13 +99,11 @@ app.all('/playlist', async (req,res) =>{
         return data
       })
       .catch(e => {
-        res.statusMessage(e)
-        res.sendStatus(500)
+        res.status(400).send(e.message)
       })
     )
   } else {
-    res.statusMessage = 'invalid url'
-    res.sendStatus(400)
+    res.status(400).send('invalid url')
   }
 });
 
