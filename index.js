@@ -31,9 +31,10 @@ async function dl(url, format, filename) {
       .on("youtubeDlEvent", (eventType, eventData) => console.log(eventType, eventData))
       .on("error", (error) => {
         console.log('reject')
-        m = \n Error code: 1\n \n Stderr:\n ERROR: fixed output name but more than one file to download
-        const regex = /(ERROR: )(.*)$/
-        reject(e)
+        const regex = /ERROR: (.*)/
+        errorstring = error.message.toString()
+        extracted = errorstring.match(regex)[1]
+        reject(extracted)
       })
       .once("close", () => {
         console.log("all done")
@@ -64,7 +65,8 @@ app.all('/audio', async (req,res) =>{
       fs.remove(filenamefinal)
     })
     .catch(e => {
-      res.status(400).send(e)
+      res.statusMessage = e
+      res.sendStatus(400)
     })
 });
 
@@ -77,7 +79,8 @@ app.all('/video', async (req,res) =>{
       res.download(filename)
     })
     .catch(e => {
-      res.status(400).send(e)
+      res.statusMessage = e
+      res.sendStatus(400)
     })
 });
 
@@ -85,7 +88,8 @@ app.all('/getinfo', async (req,res) =>{
   res.json(
     await ytdl.getVideoInfo(req.body.url)
     .catch(e => {
-      res.status(400).send(e.message)
+      res.statusMessage = e
+      res.sendStatus(400)
     })
   )
 });
@@ -99,11 +103,13 @@ app.all('/playlist', async (req,res) =>{
         return data
       })
       .catch(e => {
-        res.status(400).send(e.message)
+      res.statusMessage = e
+      res.sendStatus(400)
       })
     )
   } else {
-    res.status(400).send('invalid url')
+      res.statusMessage = 'invalid url'
+      res.sendStatus(500)
   }
 });
 
