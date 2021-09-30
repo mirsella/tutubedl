@@ -30,7 +30,8 @@
     <div :key="index" v-for="(video, index) in videos" class="flex justify-center">
       <div class="w-1/2 items-center block m-10 md:flex justify-center">
         <div class="flex justify-center md:w-1/2 w-full">
-          <img class="w-50" :src="video.thumbnail">
+          <img class="w-50" :src="video.thumbnail" :alt="video.thumbnail">
+          {{video.thumbnail}}
         </div>
         <div class="md:w-1/2">
           <div class="m-3 text-center">
@@ -75,70 +76,37 @@ export default {
     async search() {
       this.loading.get = true
       this.err = ''
-      // if (this.url.includes('playlist?list=') && ! this.url.includes('?index=')) {
-      if (this.url.includes('playlist?list=')) {
-        await axios.post(this.apiurl + '/playlist',
-          { url: this.url },
-          { headers: { 'Content-Type': 'application/json'} }
-        )
-          .then(res => {
-            if (res.status === 200) {
-              this.videos = res.data.items.map(e => {
-                return {
-                  title: e.title,
-                  url: e.url,
-                  duration: e.duration,
-                  thumbnail: e.bestThumbnail.url,
-                  hasvideo: false
-                }
-              })
+      await axios.post(this.apiurl + '/getinfo',
+        { url: this.url },
+        { headers: { 'Content-Type': 'application/json'} }
+      )
+        .then(res => {
+          if (res.status === 200) {
+            let videos
+            console.log('res data', res.data)
+            if (res.data.id) {
+              console.log('in single')
+              videos = [res.data]
             } else {
-              this.err = res.statusText
+              console.log('in playlist')
+              videos = res.data
             }
-          })
-      } else if (this.url.includes('&index=')) {
-        await axios.post(this.apiurl + '/getinfo',
-          { url: this.url },
-          { headers: { 'Content-Type': 'application/json'} }
-        )
-          .then(res => {
-            if (res.status === 200) {
-              // https://www.youtube.com/watch?v=72QAAOaYW2M&list=PLnYA0n5BTNscRlnFBkNGJrCyKdOqGtID9&index=3
-              indexr = this.url.match(/&index=([0-9]+)/)
-              console.log(indexr)
-              index = indexr[1]
-              selected = res.data[index]
-              this.videos = [{
-                title: selected.title,
-                duration: `${Math.floor(selected.duration / 60)}:${Math.floor(selected.duration % 60)}`,
-                thumbnail: selected.thumbnail,
-                url: selected.webpage_url,
-                hasvideo: selected.vcodec === "none" ? false : true
+            console.log('videos :', videos)
+            this.videos = videos.map(video => {
+              return [{
+                title: video.title,
+                duration: `${Math.floor(video.duration / 60)}:${Math.floor(video.duration % 60)}`,
+                thumbnail: video.thumbnail,
+                url: video.webpage_url,
+                hasvideo: video.vcodec === "none" ? false : true
               }]
-            } else {
-              this.err = res.statusText
-            }
-          })
-      this.loading.get = false
-      } else {
-        await axios.post(this.apiurl + '/getinfo',
-          { url: this.url },
-          { headers: { 'Content-Type': 'application/json'} }
-        )
-          .then(res => {
-            if (res.status === 200) {
-              this.videos = [{
-                title: res.data.title,
-                duration: `${Math.floor(res.data.duration / 60)}:${Math.floor(res.data.duration % 60)}`,
-                thumbnail: res.data.thumbnail,
-                url: res.data.webpage_url,
-                hasvideo: res.data.vcodec === "none" ? false : true
-              }]
-            } else {
-              this.err = res.statusText
-            }
-          })
-      }
+            })
+            console.log('this.videos', this.videos)
+          } else {
+            console.log(res)
+            this.err = res.statusText
+          }
+        })
       this.loading.get = false
     },
     async downloadvideo(index) {

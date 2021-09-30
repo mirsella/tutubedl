@@ -85,6 +85,7 @@ app.all('/video', async (req,res) =>{
 });
 
 app.all('/getinfo', async (req,res) =>{
+  console.log(req.body.url)
   res.json(
     await ytdl.getVideoInfo(req.body.url)
     .catch(e => {
