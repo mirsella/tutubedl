@@ -22,7 +22,7 @@
     "@vitejs/plugin-vue": "^1.9.2",
     "@vue/compiler-sfc": "^3.1.5",
     "vite": "^2.6.2",
-    "vite-plugin-windicss": "^1.4.8",
+    "vite-plugin-windicss": "^1.4.9",
     "windicss": "^3.1.8"
   }
 }
