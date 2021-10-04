@@ -22,9 +22,10 @@ let filecount = 0
 
 async function dl(url, format, filename) {
   const arguments = {
-    audio: [url, "-x", "--no-playlist", "--no-continue", "--audio-quality", "0", "--audio-format", "mp3", "-f", "bestaudio", "--ffmpeg-location", ffmpeg.path, "-o", filename],
-    video: [url, "-f", "--no-playlist", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4", "--ffmpeg-location", ffmpeg.path, "-o", filename]
+    audio: [url, "-x", "--no-playlist", "--no-continue", "--audio-quality", "0", "--audio-format", "mp3", "-f", "bestaudio", "-o", filename, "--ffmpeg-location", ffmpeg.path],
+    video: [url, "--no-playlist", "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4", "-o", filename, "--ffmpeg-location", ffmpeg.path]
   }
+  console.log(arguments[format])
   return new Promise((resolve, reject) => {
     ytdl.exec(arguments[format])
       .on("progress", (progress) => console.log(progress.percent, progress.totalSize, progress.currentSpeed, progress.eta))
@@ -95,25 +96,5 @@ app.all('/getinfo', async (req,res) =>{
   )
 });
 
-app.all('/playlist', async (req,res) =>{
-  url = req.body.url
-  if (await ytpl.validateID(url)) {
-    res.json(
-      await ytpl(url)
-      .then(data => {
-        return data
-      })
-      .catch(e => {
-      res.statusMessage = e
-      res.sendStatus(400)
-      })
-    )
-  } else {
-      res.statusMessage = 'invalid url'
-      res.sendStatus(500)
-  }
-});
-
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => console.log(`app listening on ${PORT}`))
-

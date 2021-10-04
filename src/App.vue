@@ -31,7 +31,6 @@
       <div class="w-1/2 items-center block m-10 md:flex justify-center">
         <div class="flex justify-center md:w-1/2 w-full">
           <img class="w-50" :src="video.thumbnail" :alt="video.thumbnail">
-          {{video.thumbnail}}
         </div>
         <div class="md:w-1/2">
           <div class="m-3 text-center">
@@ -42,7 +41,7 @@
             </svg>
           </div>
           <div class="flex justify-center md:w-full">
-            <span class="m-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">{{video.title}} {{video.duration}}</span>
+            <span class="m-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700">{{video.title}} ({{video.duration}})</span>
           </div>
         </div>
         <div noshade class="h-1 bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700 rounded"></div>
@@ -83,25 +82,20 @@ export default {
         .then(res => {
           if (res.status === 200) {
             let videos
-            console.log('res data', res.data)
             if (res.data.id) {
-              console.log('in single')
               videos = [res.data]
             } else {
-              console.log('in playlist')
               videos = res.data
             }
-            console.log('videos :', videos)
             this.videos = videos.map(video => {
-              return [{
+              return {
                 title: video.title,
                 duration: `${Math.floor(video.duration / 60)}:${Math.floor(video.duration % 60)}`,
                 thumbnail: video.thumbnail,
                 url: video.webpage_url,
                 hasvideo: video.vcodec === "none" ? false : true
-              }]
+              }
             })
-            console.log('this.videos', this.videos)
           } else {
             console.log(res)
             this.err = res.statusText
