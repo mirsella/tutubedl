@@ -12,11 +12,11 @@ ytdlwrap.downloadFromGithub();
 const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap();
 
-const corser = require("corser");
-app.use(corser.create());
+// const corser = require("corser");
+// app.use(corser.create());
 
 app.use(helmet())
-// app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 // app.use(cors())
 app.use(morgan('common'));
 app.use(express.json());
