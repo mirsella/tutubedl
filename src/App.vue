@@ -58,7 +58,7 @@ export default {
   name: 'App',
   data() {
     return {
-      apiurl: import.meta.env.VITE_API || '',
+      apiurl: import.meta.env.VITE_APIBETA || '',
       url: '',
       err: '',
       gitover: false,
