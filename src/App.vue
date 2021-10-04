@@ -146,8 +146,9 @@ export default {
   },
   mounted() {
     this.$refs.searchbar.focus()
+
     // ping heroku server to pre wake it up
-    // fetch(this.apiurl)
+    fetch(this.apiurl)
   },
 }
 </script>
