@@ -16,16 +16,16 @@
     "fs-extra": "^10.0.0",
     "helmet": "^4.6.0",
     "morgan": "^1.10.0",
-    "vue": "^3.2.6",
-    "youtube-dl-wrap": "^2.1.0",
+    "vue": "^3.2.19",
+    "youtube-dl-wrap": "^2.1.1",
     "ytpl": "^2.2.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.6.1",
-    "@vue/compiler-sfc": "^3.2.6",
-    "nodemon": "^2.0.12",
-    "vite": "^2.5.4",
-    "vite-plugin-windicss": "^1.4.2",
-    "windicss": "^3.1.7"
+    "@vitejs/plugin-vue": "^1.9.2",
+    "@vue/compiler-sfc": "^3.2.19",
+    "nodemon": "^2.0.13",
+    "vite": "^2.6.2",
+    "vite-plugin-windicss": "^1.4.9",
+    "windicss": "^3.1.9"
   }
 }

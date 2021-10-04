@@ -58,8 +58,7 @@ export default {
   name: 'App',
   data() {
     return {
-      // apiurl: 'https://tutubedl.herokuapp.com',
-      apiurl: 'http://localhost:8080',
+      apiurl: import.meta.env.VITE_API || '',
       url: '',
       err: '',
       gitover: false,
