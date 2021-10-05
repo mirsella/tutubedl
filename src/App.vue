@@ -76,7 +76,12 @@ export default {
       this.err = ''
       await axios.post(this.apiurl + '/getinfo',
         { url: this.url },
-        { headers: { 'Content-Type': 'application/json'} }
+        { headers: {
+'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+        } }
       )
         .then(res => {
           if (res.status === 200) {
@@ -106,7 +111,12 @@ export default {
       this.loading.single[index] = true
       await axios.post(this.apiurl + '/video',
         { url: this.videos[index].url },
-        { headers: { 'Content-Type': 'application/json'}, responseType: 'blob' }
+        { headers: {
+'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+        }, responseType: 'blob' }
       )
         .then(res => {
           // download(res.data, this.videos[index].title.replace(/[^\x20-\x7E]/g, "")+'.mp3');
@@ -121,7 +131,12 @@ export default {
       this.loading.single[index] = true
       await axios.post(this.apiurl + '/audio',
         { url: this.videos[index].url },
-        { headers: { 'Content-Type': 'application/json'}, responseType: 'blob' }
+        { headers: {
+'Content-Type': 'application/json',
+      "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+        }, responseType: 'blob' }
       )
         .then(res => {
           if(res.status === 200) {

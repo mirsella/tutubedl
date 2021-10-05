@@ -12,6 +12,8 @@ ytdlwrap.downloadFromGithub();
 const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap();
 
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
 app.use(helmet())
 app.use(cors())
 app.use(morgan('common'));
