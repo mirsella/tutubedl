@@ -12,12 +12,8 @@ ytdlwrap.downloadFromGithub();
 const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap();
 
-const corser = require("corser");
-app.use(corser.create());
-
 app.use(helmet())
-// app.use(cors({ origin: true, credentials: true }));
-// app.use(cors())
+app.use(cors())
 app.use(morgan('common'));
 app.use(express.json());
 
@@ -49,6 +45,7 @@ async function dl(url, format, filename) {
 }
 
 app.use(async (req,res,next) => {
+  res.header("Access-Control-Allow-Origin", "*");
   const body = req.body
   if (body.url) {
     next()
@@ -59,6 +56,7 @@ app.use(async (req,res,next) => {
 })
 
 app.all('/audio', async (req,res) =>{
+  res.header("Access-Control-Allow-Origin", "*");
   url = req.body.url
   filecount += 1
   const filename = `downloaded/${filecount}.%(ext)s`
@@ -76,6 +74,7 @@ app.all('/audio', async (req,res) =>{
 });
 
 app.all('/video', async (req,res) =>{
+  res.header("Access-Control-Allow-Origin", "*");
   url = req.body.url
   filecount += 1
   const filename = `downloaded/${filecount}.mp4`
@@ -90,6 +89,7 @@ app.all('/video', async (req,res) =>{
 });
 
 app.all('/getinfo', async (req,res) =>{
+  res.header("Access-Control-Allow-Origin", "*");
   console.log(req.body.url)
   res.json(
     await ytdl.getVideoInfo(req.body.url)
