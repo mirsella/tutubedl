@@ -16,6 +16,7 @@ app.use(cors())
 app.use(helmet())
 app.use(morgan('common'));
 app.use(express.json());
+app.use(express.static('dist/'));
 
 fs.emptyDirSync('downloaded')
 let filecount = 0
