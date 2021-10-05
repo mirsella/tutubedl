@@ -12,7 +12,8 @@ ytdlwrap.downloadFromGithub();
 const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap();
 
-app.use(cors())
+//app.use(cors())
+app.use(cors({ origin: true, credentials: true }));
 app.use(helmet())
 app.use(morgan('common'));
 app.use(express.json());
