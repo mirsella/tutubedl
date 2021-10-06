@@ -1,23 +1,26 @@
-const express = require('express');
+const koa = require('koa');
 const fs = require('fs-extra');
-const morgan = require('morgan');
-const helmet = require('helmet')
-const cors = require('cors')
+const morgan = require('koa-morgan');
+const helmet = require('koa-helmet')
+const cors = require('koa-cors')
 require('dotenv').config();
-const app = express();
+const app = new koa();
 app.enable('trust proxy');
 const ytpl = require('ytpl');
 const ytdlwrap = require('youtube-dl-wrap');
 ytdlwrap.downloadFromGithub();
 const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap();
+const Router = require('koa-router');
+const router = new Router
+const bodyparser = require('koa-body');
 
-//app.use(cors())
-app.use(cors({ origin: true, credentials: true }));
+app.use(bodyparser())
+app.use(cors())
 app.use(helmet())
 app.use(morgan('common'));
-app.use(express.json());
-app.use(express.static('dist/'));
+// app.use(express.json());
+// app.use(express.static('dist/'));
 
 fs.emptyDirSync('downloaded')
 let filecount = 0
