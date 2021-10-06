@@ -103,6 +103,5 @@ app.all('/getinfo', async (req,res) =>{
 });
 
 console.log(process.env.PORT)
-// const PORT = process.env.PORT || 80
-const PORT = 80
+const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`app listening on ${PORT}`))
