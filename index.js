@@ -12,8 +12,8 @@ ytdlwrap.downloadFromGithub();
 const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap();
 
-//app.use(cors())
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors())
+// app.use(cors({ origin: true, credentials: true }));
 app.use(helmet())
 app.use(morgan('common'));
 app.use(express.json());
@@ -102,5 +102,7 @@ app.all('/getinfo', async (req,res) =>{
   )
 });
 
-const PORT = process.env.PORT || 80
+console.log(process.env.PORT)
+// const PORT = process.env.PORT || 80
+const PORT = 80
 app.listen(PORT, () => console.log(`app listening on ${PORT}`))
