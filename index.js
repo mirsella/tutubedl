@@ -59,7 +59,7 @@ app.use(async (req,res,next) => {
   }
 })
 
-app.all('/audio', async (req,res) =>{
+app.post('/audio', async (req,res) =>{
   res.header("Access-Control-Allow-Origin", "*");
   url = req.body.url
   filecount += 1
@@ -77,7 +77,7 @@ app.all('/audio', async (req,res) =>{
     })
 });
 
-app.all('/video', async (req,res) =>{
+app.post('/video', async (req,res) =>{
   res.header("Access-Control-Allow-Origin", "*");
   url = req.body.url
   filecount += 1
@@ -92,7 +92,7 @@ app.all('/video', async (req,res) =>{
     })
 });
 
-app.all('/getinfo', async (req,res) =>{
+app.post('/getinfo', async (req,res) =>{
   res.header("Access-Control-Allow-Origin", "*");
   console.log(req.body.url)
   res.json(
