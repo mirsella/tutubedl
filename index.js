@@ -96,6 +96,7 @@ app.all('/getinfo', async (req,res) =>{
   res.json(
     await ytdl.getVideoInfo(req.body.url)
     .catch(e => {
+      console.log(e)
       res.statusMessage = e
       res.sendStatus(400)
     })
