@@ -10,7 +10,7 @@ const ytpl = require('ytpl');
 const ytdlwrap = require('youtube-dl-wrap');
 ytdlwrap.downloadFromGithub();
 const ffmpeg = require('@ffmpeg-installer/ffmpeg');
-const ytdl = new ytdlwrap();
+const ytdl = new ytdlwrap("./youtube-dl");
 
 app.use(cors())
 // app.use(cors({ origin: true, credentials: true }));
