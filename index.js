@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const morgan = require('morgan');
 const helmet = require('helmet')
 const cors = require('cors')
+const secure = require('ssl-express-www');
 require('dotenv').config();
 const app = express();
 app.enable('trust proxy');
@@ -13,6 +14,7 @@ const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap("./youtube-dl");
 
 app.use(cors())
+app.use(secure)
 // app.use(cors({ origin: true, credentials: true }));
 app.use(helmet())
 app.use(morgan('common'));
@@ -103,6 +105,5 @@ app.all('/getinfo', async (req,res) =>{
   )
 });
 
-console.log(process.env.PORT)
 const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`app listening on ${PORT}`))

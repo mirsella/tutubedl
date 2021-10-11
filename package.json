@@ -17,6 +17,7 @@
     "fs-extra": "^10.0.0",
     "helmet": "^4.6.0",
     "morgan": "^1.10.0",
+    "ssl-express-www": "^3.0.8",
     "vue": "^3.2.19",
     "youtube-dl-wrap": "^2.1.1",
     "ytpl": "^2.2.3"

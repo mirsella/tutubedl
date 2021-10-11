@@ -30,7 +30,7 @@
     <div :key="index" v-for="(video, index) in videos" class="flex justify-center">
       <div class="w-1/2 items-center block m-10 md:flex justify-center">
         <div class="flex justify-center md:w-1/2 w-full">
-          <img class="w-50" :src="video.thumbnail" :alt="video.thumbnail">
+          <img class="w-50" :src="video.thumbnail" alt="thumbnail">
         </div>
         <div class="md:w-1/2">
           <div class="m-3 text-center">

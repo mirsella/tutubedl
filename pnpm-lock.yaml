@@ -13,6 +13,7 @@ specifiers:
   helmet: ^4.6.0
   morgan: ^1.10.0
   nodemon: ^2.0.13
+  ssl-express-www: ^3.0.8
   vite: ^2.6.2
   vite-plugin-windicss: ^1.4.9
   vue: ^3.2.19
@@ -30,6 +31,7 @@ dependencies:
   fs-extra: 10.0.0
   helmet: 4.6.0
   morgan: 1.10.0
+  ssl-express-www: 3.0.8
   vue: 3.2.20
   youtube-dl-wrap: 2.1.1
   ytpl: 2.2.3
@@ -1566,6 +1568,12 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
+
+  /ssl-express-www/3.0.8:
+    resolution: {integrity: sha512-BoPgj9UFZVXiY/FySVRJnGaYE09XWpXJDGsIc1mXCvt2Fn7deyC6T4oHV8SoI5zhAnj2u5OZwXfZOfOTcOuajw==}
+    dependencies:
+      express: 4.17.1
+    dev: false
 
   /statuses/1.5.0:
     resolution: {integrity: sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=}
