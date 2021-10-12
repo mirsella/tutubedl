@@ -75,49 +75,53 @@ export default {
     async search() {
       this.loading.get = true
       this.err = ''
-      await axios.post(this.apiurl + '/getinfo',
-        { url: this.url },
-        { headers: {
-'Content-Type': 'application/json',
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
-        } }
-      )
-        .then(res => {
-          if (res.status === 200) {
-            let videos
-            if (res.data.id) {
-              videos = [res.data]
+      if (this.url.includes('playlist?list=') || this.url.includes('?index=')) {
+        await axios.post(this.apiurl + '/playlist',
+          { url: this.url },
+          { headers: { 'Content-Type': 'application/json'} }
+        )
+          .then(res => {
+            if (res.status === 200) {
+              this.videos = res.data.items.map(e => {
+                return {
+                  title: e.title,
+                  url: e.url,
+                  duration: e.duration,
+                  thumbnail: e.bestThumbnail.url,
+                  hasvideo: false
+                }
+              })
             } else {
-              videos = res.data
+              this.err = res.statusText
             }
-            this.videos = videos.map(video => {
-              return {
-                title: video.title,
-                duration: `${Math.floor(video.duration / 60)}:${Math.floor(video.duration % 60)}`,
-                thumbnail: video.thumbnail,
-                url: video.webpage_url,
-                hasvideo: video.vcodec === "none" ? false : true
-              }
-            })
-          } else {
-            console.log(res)
-            this.err = res.statusText
-          }
-        })
+          })
+      } else {
+        await axios.post(this.apiurl + '/getinfo',
+          { url: this.url },
+          { headers: { 'Content-Type': 'application/json'} }
+        )
+          .then(res => {
+            if (res.status === 200) {
+              this.videos = [{
+                title: res.data.title,
+                duration: `${Math.floor(res.data.duration / 60)}:${Math.floor(res.data.duration % 60)}`,
+                thumbnail: res.data.thumbnail,
+                url: res.data.webpage_url,
+                hasvideo: res.data.vcodec === "none" ? false : true
+              }]
+            } else {
+              console.log(res)
+              this.err = res.statusText
+            }
+          })
+      }
       this.loading.get = false
     },
     async downloadvideo(index) {
       this.loading.single[index] = true
       await axios.post(this.apiurl + '/video',
         { url: this.videos[index].url },
-        { headers: {
-'Content-Type': 'application/json',
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
-        }, responseType: 'blob' }
+        { headers: { 'Content-Type': 'application/json' }, responseType: 'blob' }
       )
         .then(res => {
           // download(res.data, this.videos[index].title.replace(/[^\x20-\x7E]/g, "")+'.mp3');
@@ -134,7 +138,7 @@ export default {
         { url: this.videos[index].url },
         { headers: {
 'Content-Type': 'application/json',
-      "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
           "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
         }, responseType: 'blob' }

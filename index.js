@@ -21,7 +21,7 @@ app.use(
     contentSecurityPolicy: false,
   })
 );
-app.use(secure)
+// app.use(secure)
 app.use(morgan('common'));
 app.use(express.json());
 app.use(express.static('dist/'));
@@ -109,6 +109,26 @@ app.post('/getinfo', async (req,res) =>{
     })
   )
 });
+
+app.post('/playlist', async (req,res) =>{
+  url = req.body.url
+  if (await ytpl.validateID(url)) {
+    res.json(
+      await ytpl(url)
+      .then(data => {
+        return data
+      })
+      .catch(e => {
+        res.statusMessage(e)
+        res.sendStatus(500)
+      })
+    )
+  } else {
+      res.statusMessage = 'invalid url'
+      res.sendStatus(400)
+    }
+});
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`app listening on ${PORT}`))
