@@ -14,9 +14,14 @@ const ffmpeg = require('@ffmpeg-installer/ffmpeg');
 const ytdl = new ytdlwrap("./youtube-dl");
 
 app.use(cors())
-app.use(secure)
 // app.use(cors({ origin: true, credentials: true }));
-app.use(helmet())
+// app.use(helmet())
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
+app.use(secure)
 app.use(morgan('common'));
 app.use(express.json());
 app.use(express.static('dist/'));
