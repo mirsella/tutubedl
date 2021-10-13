@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     async search() {
+      this.loading.single = []
       this.loading.get = true
       this.err = ''
       if (this.url.includes('playlist?list=') || this.url.includes('?index=')) {
@@ -136,18 +137,15 @@ export default {
       this.loading.single[index] = true
       await axios.post(this.apiurl + '/audio',
         { url: this.videos[index].url },
-        { headers: {
-'Content-Type': 'application/json',
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
-        }, responseType: 'blob' }
+        { headers: { 'Content-Type': 'application/json' }, responseType: 'blob' }
       )
         .then(res => {
           if(res.status === 200) {
+            console.log('downloadaudio sucess', res)
             // download(res.data, this.videos[index].title.replace(/[^\x20-\x7E]/g, "")+'.mp4');
             download(res.data, this.videos[index].title+'.mp4');
           } else {
+            console.log('downloadaudio failed', res)
             this.err = res.statusText
           }
         })
