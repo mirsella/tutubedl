@@ -23,7 +23,7 @@
     "ytpl": "^2.2.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.9.2",
+    "@vitejs/plugin-vue": "^2.0.0",
     "@vue/compiler-sfc": "^3.2.19",
     "nodemon": "^2.0.13",
     "vite": "^2.6.2",
